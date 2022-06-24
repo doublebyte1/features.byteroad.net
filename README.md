@@ -10,6 +10,8 @@
 
 ## Install SSl Certificates
 
+Follow [these](https://certbot.eff.org/instructions?ws=other&os=ubuntufocal) instructions to install certbot.
+
 ```
 certbot certonly --standalone -d features.byteroad.net
 certbot certonly --standalone -d ivaucher.byteroad.net
