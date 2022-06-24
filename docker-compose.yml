@@ -104,10 +104,10 @@ services:
 
   app:
     container_name: app
-    #image:  doublebyte/ivaucher-frontend:latest
-    build:
-      context: ./ivaucher-frontend
-      dockerfile: Dockerfile
+    image:  doublebyte/ivaucher-frontend:latest
+    # build:
+    #   context: ./ivaucher-frontend
+    #   dockerfile: Dockerfile
     volumes:
       - './ivaucher-frontend/:/app'
       - './ivaucher-frontend/app/node_modules'
