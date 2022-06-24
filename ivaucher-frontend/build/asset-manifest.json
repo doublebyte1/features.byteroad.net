@@ -1,0 +1,23 @@
+{
+  "files": {
+    "main.css": "/ivaucher-frontend/static/css/main.76879cb9.chunk.css",
+    "main.js": "/ivaucher-frontend/static/js/main.a42c5415.chunk.js",
+    "main.js.map": "/ivaucher-frontend/static/js/main.a42c5415.chunk.js.map",
+    "runtime-main.js": "/ivaucher-frontend/static/js/runtime-main.e7c741d6.js",
+    "runtime-main.js.map": "/ivaucher-frontend/static/js/runtime-main.e7c741d6.js.map",
+    "static/js/2.4abfbb62.chunk.js": "/ivaucher-frontend/static/js/2.4abfbb62.chunk.js",
+    "static/js/2.4abfbb62.chunk.js.map": "/ivaucher-frontend/static/js/2.4abfbb62.chunk.js.map",
+    "index.html": "/ivaucher-frontend/index.html",
+    "precache-manifest.5c6626228638a1a79f1cd2081f4fa091.js": "/ivaucher-frontend/precache-manifest.5c6626228638a1a79f1cd2081f4fa091.js",
+    "service-worker.js": "/ivaucher-frontend/service-worker.js",
+    "static/css/main.76879cb9.chunk.css.map": "/ivaucher-frontend/static/css/main.76879cb9.chunk.css.map",
+    "static/media/BR_logo_full_04.png": "/ivaucher-frontend/static/media/BR_logo_full_04.e6e77fea.png",
+    "static/media/App.css": "/ivaucher-frontend/static/media/InsaniburgerWithCheese-47Dp.7ce72a53.ttf"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.e7c741d6.js",
+    "static/js/2.4abfbb62.chunk.js",
+    "static/css/main.76879cb9.chunk.css",
+    "static/js/main.a42c5415.chunk.js"
+  ]
+}

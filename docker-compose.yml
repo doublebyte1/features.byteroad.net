@@ -1,0 +1,123 @@
+# =================================================================
+#
+# Authors: Joana Simoes <jo@doublebyte.net>>
+#
+# Copyright (c) 2021 Joana Simoes
+#
+# Permission is hereby granted, free of charge, to any person
+# obtaining a copy of this software and associated documentation
+# files (the "Software"), to deal in the Software without
+# restriction, including without limitation the rights to use,
+# copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the
+# Software is furnished to do so, subject to the following
+# conditions:
+#
+# The above copyright notice and this permission notice shall be
+# included in all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+# EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+# OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+# NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+# HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+# WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+# FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+# OTHER DEALINGS IN THE SOFTWARE.
+#
+# =================================================================
+
+version: '3.3'
+
+services:
+
+  nginx:
+    image: nginx:stable-alpine
+    container_name: nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx:/etc/nginx/conf.d
+      #- /etc/letsencrypt/:/etc/letsencrypt/
+      #- /etc/ssl/certs/dhparam.pem:/etc/ssl/certs/dhparam.pem
+      #- ./nginx/options-ssl-nginx.conf:/etc/options-ssl-nginx.conf
+    #container_name: nginx
+    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
+    #network_mode: "host" 
+    restart: unless-stopped
+    depends_on:
+      - pygeoapi
+      - app
+
+  pygeoapi:
+    image: geopython/pygeoapi:0.11.0
+
+    container_name: pygeoapi_mongo
+
+    entrypoint:
+      - /mongo-entrypoint.sh
+
+    # ports:
+    #   - 5000:80
+
+    volumes:
+      - ./pygeoapi/docker.config.yml:/pygeoapi/local.config.yml
+      - ./pygeoapi/mongo-entrypoint.sh:/mongo-entrypoint.sh
+      - ./pygeoapi/wait-for-mongo.sh:/wait-for-mongo.sh
+    links:
+      - mongo
+    depends_on:
+      - mongo
+
+  mongo:
+    image: mongo
+    #restart: always
+    container_name: mongo
+    #ports:
+      #- 27017:27017
+    volumes:
+      #- ./data:/data/db
+      - ./docker-entrypoint-initdb.d/add_data.sh:/docker-entrypoint-initdb.d/add_data.sh:ro
+      - ./mongo_data/:/mongo_data
+    environment:
+        MONGO_INITDB_DATABASE: db
+    #   MONGO_INITDB_ROOT_USERNAME: root
+    #   MONGO_INITDB_ROOT_PASSWORD: example
+
+  mongo-express:
+    image: mongo-express
+    restart: always
+    container_name: mongo_express
+    links:
+      - mongo
+    depends_on:
+      - mongo
+    ports:
+      - 8081:8081
+    environment:
+        ME_CONFIG_BASICAUTH_USERNAME: root
+        ME_CONFIG_BASICAUTH_PASSWORD: CHANGEME
+    #   ME_CONFIG_MONGODB_ADMINUSERNAME: root
+    #   ME_CONFIG_MONGODB_ADMINPASSWORD: example
+    #   ME_CONFIG_MONGODB_URL: mongodb://root:example@mongo:27017/
+
+  app:
+    container_name: app
+    #image:  doublebyte/ivaucher-frontend:latest
+    build:
+      context: ./ivaucher-frontend
+      dockerfile: Dockerfile
+    volumes:
+      - './ivaucher-frontend/:/app'
+      - './ivaucher-frontend/app/node_modules'
+    # ports:
+    #   - 3001:3000
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    depends_on:
+      - pygeoapi
+
+volumes:
+  mongo_data: {}
+
