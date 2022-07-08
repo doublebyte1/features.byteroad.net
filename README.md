@@ -16,3 +16,11 @@ Follow [these](https://certbot.eff.org/instructions?ws=other&os=ubuntufocal) ins
 certbot certonly --standalone -d features.byteroad.net
 certbot certonly --standalone -d ivaucher.byteroad.net
 ```
+
+## Start the docker composition
+
+(in the background)
+
+```
+docker-compose up -d
+```
